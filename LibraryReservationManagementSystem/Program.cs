@@ -1,13 +1,17 @@
 using LibraryReservationManagementSystem.DbContexts;
+using LibraryReservationManagementSystem.Models;
+using LibraryReservationManagementSystem.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
-
 builder.AddNpgsqlDbContext<NpgApplicationContext>(connectionName: "LRMS");
+
+// Add services to the container.
+builder.Services.AddScoped<BookRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -15,7 +19,17 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+//Applying migrations
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<NpgApplicationContext>();
+    db.Database.EnsureCreated();
+}
+
+
 app.MapDefaultEndpoints();
+
+app.MapHealthChecks("/health");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
