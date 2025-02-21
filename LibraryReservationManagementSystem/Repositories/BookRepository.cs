@@ -4,16 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryReservationManagementSystem.Repositories;
 
-public class BookRepository(NpgApplicationContext applicationContext) : IRepository<Book>
+public class BookRepository(NpgApplicationContext applicationContext) : IRepository<Book>, IAsyncDisposable
 {
     public IOperationResult<Book> Add(Book entity)
     {
         var book = applicationContext.Books.Add(entity);
-        applicationContext.SaveChanges();
 
         if (book.State != EntityState.Added)
             "Book could not be added".AsFailedOperation<Book>();
-
 
         return book.Entity.AsSuccessfulOperation();
     }
@@ -21,7 +19,6 @@ public class BookRepository(NpgApplicationContext applicationContext) : IReposit
     public IOperationResult<Book> Update(Book entity)
     {
         var book = applicationContext.Books.Update(entity);
-        applicationContext.SaveChanges();
 
         if (book.State != EntityState.Modified)
             "Book could not be updated".AsFailedOperation<Book>();
@@ -32,7 +29,6 @@ public class BookRepository(NpgApplicationContext applicationContext) : IReposit
     public IOperationResult<Book> Delete(Book entity)
     {
         var book = applicationContext.Books.Remove(entity);
-        applicationContext.SaveChanges();
         
         if (book.State != EntityState.Deleted)
             "Book could not be deleted".AsFailedOperation<Book>();
@@ -68,4 +64,8 @@ public class BookRepository(NpgApplicationContext applicationContext) : IReposit
 
         return books.AsSuccessfulOperation<IList<Book>>();
     }
+
+    public void Dispose() => applicationContext.SaveChanges();
+
+    public async ValueTask DisposeAsync() => await applicationContext.SaveChangesAsync();
 }

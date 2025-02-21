@@ -1,6 +1,6 @@
 ﻿namespace LibraryReservationManagementSystem.Repositories;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T> : IDisposable where T : class
 {
     IOperationResult<T> Add(T entity);
 
