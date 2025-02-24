@@ -54,12 +54,12 @@ public class CustomerController(RepositoryFactory repositoryFactory, ILogger<Boo
     #endregion
 
     [HttpPost(Name = "CreateCustomer")]
-    public IActionResult Post(CreateCustomerRequest customer)
+    public IActionResult Post([FromBody] CreateCustomerRequest customer)
     {
         using var repository = repositoryFactory.GetRepository<Customer>();
         var result = repository.Add(customer.ToCustomer());
         return result.IsSuccess
-            ? Ok(result.Data)
+            ? Ok(result.Data)   
             : BadRequest(result.Message);
     }
 
@@ -88,7 +88,7 @@ public class CustomerController(RepositoryFactory repositoryFactory, ILogger<Boo
     #endregion
 
     [HttpPut(Name = "UpdateCustomer")]
-    public IActionResult Put(int id, UpdateCustomerRequest customer)
+    public IActionResult Put([FromBody] UpdateCustomerRequest customer)
     {
         using var repository = repositoryFactory.GetRepository<Customer>();
         var result = repository.Update(customer.ToCustomer());

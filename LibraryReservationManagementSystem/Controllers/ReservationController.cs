@@ -41,11 +41,6 @@ public class ReservationController(RepositoryFactory repositoryFactory, ILogger<
 
     }
     #endregion
-    [HttpPost(Name = "CreateReservation")]
-    public IActionResult Post(CreateReservationRequest reservation)
-    {
-        return null;
-    }
 
     [HttpDelete("{id}", Name = "DeleteReservation")]
     public IActionResult Delete(int id)

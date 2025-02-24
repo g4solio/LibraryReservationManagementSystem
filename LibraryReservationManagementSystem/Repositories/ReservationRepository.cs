@@ -1,10 +1,11 @@
 ﻿using LibraryReservationManagementSystem.DbContexts;
 using LibraryReservationManagementSystem.Models;
+using LibraryReservationManagementSystem.OperationResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryReservationManagementSystem.Repositories;
 
-public class ReservationRepository(NpgApplicationContext applicationContext) : IRepository<Reservation>
+public class ReservationRepository(NpgApplicationContext applicationContext) : IRepository<Reservation>, IAsyncDisposable
 {
     public IOperationResult<Reservation> Add(Reservation entity)
     {
@@ -67,5 +68,15 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
             "No reservations found".AsFailedOperation<IList<Reservation>>();
 
         return reservations.AsSuccessfulOperation<IList<Reservation>>();
+    }
+
+    public void Dispose()
+    {
+        applicationContext.SaveChanges();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await applicationContext.SaveChangesAsync();
     }
 }

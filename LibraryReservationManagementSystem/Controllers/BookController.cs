@@ -54,7 +54,7 @@ public class BookController(RepositoryFactory repositoryFactory, ILogger<BookCon
     #endregion
 
     [HttpPost(Name = "CreateBook")]
-    public IActionResult Post(CreateBookRequest book)
+    public IActionResult Post([FromBody] CreateBookRequest book)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
         var result = repository.Add(book.ToBook());
@@ -87,8 +87,8 @@ public class BookController(RepositoryFactory repositoryFactory, ILogger<BookCon
 
     #endregion
 
-    [HttpPut("{id}", Name = "UpdateBook")]
-    public IActionResult Put(int id, UpdateBookRequest book)
+    [HttpPut( Name = "UpdateBook")]
+    public IActionResult Put([FromBody] UpdateBookRequest book)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
         var result = repository.Update(book.ToBook());
@@ -110,5 +110,35 @@ public class BookController(RepositoryFactory repositoryFactory, ILogger<BookCon
         return result.IsSuccess
             ? Ok(result.Data)
             : BadRequest(result.Message);
+    }
+
+    [HttpPost(Name = "SearchBooksByAuthor")]
+    public IActionResult SearchBooksByAuthor([FromBody]string author)
+    {
+        using var repository = repositoryFactory.GetRepository<Book>();
+        var books = repository.GetByCondition(b => b.Author == author);
+        return books.IsSuccess
+            ? Ok(books.Data)
+            : NotFound(books.Message);
+    }
+
+    [HttpPost(Name = "SearchBooksByTitle")]
+    public IActionResult SearchBooksByTitle([FromBody] string title)
+    {
+        using var repository = repositoryFactory.GetRepository<Book>();
+        var books = repository.GetByCondition(b => b.Title == title);
+        return books.IsSuccess
+            ? Ok(books.Data)
+            : NotFound(books.Message);
+    }
+
+    [HttpPost(Name = "SearchBooksByStatus")]
+    public IActionResult SearchBooksByStatus([FromBody] Book.StatusEnum status)
+    {
+        using var repository = repositoryFactory.GetRepository<Book>();
+        var books = repository.GetByCondition(b => b.Status == status);
+        return books.IsSuccess
+            ? Ok(books.Data)
+            : NotFound(books.Message);
     }
 }
