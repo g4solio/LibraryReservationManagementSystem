@@ -33,8 +33,6 @@ using (var scope = app.Services.CreateScope())
 
 app.MapDefaultEndpoints();
 
-app.MapHealthChecks("/health");
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
