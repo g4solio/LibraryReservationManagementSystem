@@ -41,6 +41,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(_ => _.Servers = []); //TODO(DG): Normalize code after deployed fix, https://github.com/dotnet/aspnetcore/issues/57332
 }
+else
+{
+    app.UseExceptionHandler("/error");
+}
 
 app.UseHttpsRedirection();
 
