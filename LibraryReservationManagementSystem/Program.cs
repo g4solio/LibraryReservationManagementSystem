@@ -1,8 +1,6 @@
 using LibraryReservationManagementSystem.DbContexts;
-using LibraryReservationManagementSystem.Models;
 using LibraryReservationManagementSystem.Repositories;
 using LibraryReservationManagementSystem.Services;
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

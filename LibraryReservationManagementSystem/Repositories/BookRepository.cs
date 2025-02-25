@@ -30,10 +30,10 @@ public class BookRepository(NpgApplicationContext applicationContext) : IReposit
     public IOperationResult<Book> Delete(Book entity)
     {
         var book = applicationContext.Books.Remove(entity);
-        
+
         if (book.State != EntityState.Deleted)
             "Book could not be deleted".AsFailedOperation<Book>();
-        
+
         return book.Entity.AsSuccessfulOperation();
     }
 
@@ -43,7 +43,7 @@ public class BookRepository(NpgApplicationContext applicationContext) : IReposit
 
         if (book == null)
             "Book could not be found".AsFailedOperation<Book>();
-        
+
         return book!.AsSuccessfulOperation();
     }
 

@@ -10,10 +10,10 @@ public class LibraryReservationManagementService(IRepositoryFactory repositoryFa
     {
         using var customerRepository = repositoryFactory.GetRepository<Customer>();
         using var bookRepository = repositoryFactory.GetRepository<Book>();
-        
+
         var customer = customerRepository.GetById(customerId);
-        
-        if (!customer.IsSuccess)                        
+
+        if (!customer.IsSuccess)
             return customer.Message.AsFailedOperation<Reservation>();
 
         var book = bookRepository.GetById(bookId);
@@ -34,7 +34,7 @@ public class LibraryReservationManagementService(IRepositoryFactory repositoryFa
             ExpirationDate = DateTime.Now.AddDays(7),
             ReservationDate = DateTime.Now
         };
-        
+
         using var reservationRepository = repositoryFactory.GetRepository<Reservation>();
         var result = reservationRepository.Add(reservation);
 
@@ -44,7 +44,7 @@ public class LibraryReservationManagementService(IRepositoryFactory repositoryFa
     public IOperationResult<Reservation> ExtendReservation(int reservationId, DateTime newExpirationDate)
     {
         using var reservationRepository = repositoryFactory.GetRepository<Reservation>();
-        
+
         var reservation = reservationRepository.GetById(reservationId);
         if (!reservation.IsSuccess)
             return reservation.Message.AsFailedOperation<Reservation>();

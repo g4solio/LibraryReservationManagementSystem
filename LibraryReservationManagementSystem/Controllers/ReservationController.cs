@@ -48,7 +48,7 @@ public class ReservationController(IRepositoryFactory repositoryFactory, ILogger
         using var repository = repositoryFactory.GetRepository<Reservation>();
         var repositoryToRemove = repository.GetById(id);
 
-        if(!repositoryToRemove.IsSuccess || repositoryToRemove.Data == null)
+        if (!repositoryToRemove.IsSuccess || repositoryToRemove.Data == null)
             return NotFound(repositoryToRemove.Message);
 
         var result = repository.Delete(repositoryToRemove.Data);

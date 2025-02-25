@@ -11,7 +11,7 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
     {
         var customer = applicationContext.Customers.Add(entity);
         applicationContext.SaveChanges();
-        
+
         if (customer.State != EntityState.Added)
             "Customer could not be added".AsFailedOperation<Customer>();
 
@@ -25,7 +25,7 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
 
         if (customer.State != EntityState.Modified)
             "Customer could not be updated".AsFailedOperation<Customer>();
-        
+
         return customer.Entity.AsSuccessfulOperation();
     }
 
@@ -43,20 +43,20 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
     public IOperationResult<Customer> GetById(int id)
     {
         var customer = applicationContext.Customers.Find(id);
-        
+
         if (customer == null)
             "Customer could not be found".AsFailedOperation<Customer>();
-        
+
         return customer!.AsSuccessfulOperation();
     }
 
     public IOperationResult<IList<Customer>> GetAll()
     {
         var customers = applicationContext.Customers.ToList();
-        
+
         if (customers.Count == 0)
             "No customers found".AsFailedOperation<IEnumerable<Customer>>();
-        
+
         return customers.AsSuccessfulOperation<IList<Customer>>();
     }
 

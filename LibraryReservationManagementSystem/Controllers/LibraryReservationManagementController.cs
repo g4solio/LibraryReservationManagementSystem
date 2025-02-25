@@ -7,7 +7,7 @@ namespace LibraryReservationManagementSystem.Controllers;
 [Route("[controller]")]
 public class LibraryReservationManagementController(LibraryReservationManagementService service) : ControllerBase
 {
-    
+
     [HttpPost("rent", Name = "RentABook")]
     public IActionResult RentABook(int customerId, int bookId)
     {

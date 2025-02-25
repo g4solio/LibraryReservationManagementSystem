@@ -59,7 +59,7 @@ public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<Bo
         using var repository = repositoryFactory.GetRepository<Customer>();
         var result = repository.Add(customer.ToCustomer());
         return result.IsSuccess
-            ? Ok(result.Data)   
+            ? Ok(result.Data)
             : BadRequest(result.Message);
     }
 
@@ -105,7 +105,7 @@ public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<Bo
 
         if (!customerToDelete.IsSuccess || customerToDelete.Data == null)
             return NotFound(customerToDelete.Message);
-        
+
         var result = repository.Delete(customerToDelete.Data);
         return result.IsSuccess
             ? Ok(result.Data)

@@ -22,7 +22,7 @@ public class LibraryReservationManagementServiceTests
 
         if (bookRepoMoqOptions != null)
             bookRepoMoqOptions(bookRepositoryMoq);
-        
+
         if (customerRepoMoqOptions != null)
             customerRepoMoqOptions(customerRepositoryMoq);
 
@@ -30,7 +30,7 @@ public class LibraryReservationManagementServiceTests
             reservationRepoMoqOptions(reservationRepositoryMoq);
 
         var repositoryFactoryMoq = new Mock<IRepositoryFactory>();
-        
+
         repositoryFactoryMoq.Setup(f => f.GetRepository<Book>()).Returns(bookRepositoryMoq.Object);
         repositoryFactoryMoq.Setup(f => f.GetRepository<Customer>()).Returns(customerRepositoryMoq.Object);
         repositoryFactoryMoq.Setup(f => f.GetRepository<Reservation>()).Returns(reservationRepositoryMoq.Object);
@@ -40,7 +40,7 @@ public class LibraryReservationManagementServiceTests
     }
 
 
-    #region RentABookù
+    #region RentABook
 
     [Test]
     public void RentABook_BookNotFound_ReturnsFailedOperation()
@@ -135,7 +135,7 @@ public class LibraryReservationManagementServiceTests
         var service = Setup(
             bookRepoMoqOptions: moq => moq.Setup(r => r.GetById(It.Is<int>(id => id == 1))).Returns(book.AsSuccessfulOperation()),
             customerRepoMoqOptions: moq => moq.Setup(r => r.GetById(It.Is<int>(id => id == 1))).Returns(customer.AsSuccessfulOperation()),
-            reservationRepoMoqOptions: moq => moq.Setup(r => r.Add(It.Is<Reservation>(r => 
+            reservationRepoMoqOptions: moq => moq.Setup(r => r.Add(It.Is<Reservation>(r =>
                     r.Book.Id == book.Id && r.Customer.Id == customer.Id && r.ReservationDate.Day == DateTime.Now.Day && r.ExpirationDate.Day == r.ReservationDate.AddDays(7).Day
                 )
             )).Returns(new Reservation

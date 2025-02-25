@@ -14,7 +14,7 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
 
         if (reservation.State != EntityState.Added)
             "Reservation could not be added".AsFailedOperation<Reservation>();
-        
+
         return reservation.Entity.AsSuccessfulOperation();
     }
 
@@ -22,7 +22,7 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
     {
         var reservation = applicationContext.Reservations.Update(entity);
         applicationContext.SaveChanges();
-        
+
         if (reservation.State != EntityState.Modified)
             "Reservation could not be updated".AsFailedOperation<Reservation>();
 
@@ -36,17 +36,17 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
 
         if (reservation.State != EntityState.Deleted)
             "Reservation could not be deleted".AsFailedOperation<Reservation>();
-        
+
         return reservation.Entity.AsSuccessfulOperation();
     }
 
     public IOperationResult<Reservation> GetById(int id)
     {
         var reservation = applicationContext.Reservations.Find(id);
-        
+
         if (reservation == null)
             "Reservation could not be found".AsFailedOperation<Reservation>();
-        
+
         return reservation!.AsSuccessfulOperation();
     }
 

@@ -87,7 +87,7 @@ public class BookController(IRepositoryFactory repositoryFactory, ILogger<BookCo
 
     #endregion
 
-    [HttpPut( Name = "UpdateBook")]
+    [HttpPut(Name = "UpdateBook")]
     public IActionResult Put([FromBody] UpdateBookRequest book)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
@@ -113,7 +113,7 @@ public class BookController(IRepositoryFactory repositoryFactory, ILogger<BookCo
     }
 
     [HttpPost(Name = "SearchBooksByAuthor")]
-    public IActionResult SearchBooksByAuthor([FromBody]string author)
+    public IActionResult SearchBooksByAuthor([FromBody] string author)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
         var books = repository.GetByCondition(b => b.Author == author);
