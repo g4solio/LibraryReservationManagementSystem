@@ -10,6 +10,10 @@ namespace LibraryReservationManagementSystem.Tests
             appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
             {
                 clientBuilder.AddStandardResilienceHandler();
+                clientBuilder.ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+                });
             });
             await using var app = await appHost.BuildAsync();
             var resourceNotificationService = app.Services.GetRequiredService<ResourceNotificationService>();
