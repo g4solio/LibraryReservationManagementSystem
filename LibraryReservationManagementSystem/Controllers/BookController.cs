@@ -112,8 +112,8 @@ public class BookController(IRepositoryFactory repositoryFactory, ILogger<BookCo
             : BadRequest(result.Message);
     }
 
-    [HttpPost(Name = "SearchBooksByAuthor")]
-    public IActionResult SearchBooksByAuthor([FromBody] string author)
+    [HttpGet("search/author/{author}", Name = "SearchBooksByAuthor")]
+    public IActionResult SearchBooksByAuthor(string author)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
         var books = repository.GetByCondition(b => b.Author == author);
@@ -122,8 +122,8 @@ public class BookController(IRepositoryFactory repositoryFactory, ILogger<BookCo
             : NotFound(books.Message);
     }
 
-    [HttpPost(Name = "SearchBooksByTitle")]
-    public IActionResult SearchBooksByTitle([FromBody] string title)
+    [HttpGet("search/title/{title}", Name = "SearchBooksByTitle")]
+    public IActionResult SearchBooksByTitle(string title)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
         var books = repository.GetByCondition(b => b.Title == title);
@@ -132,8 +132,8 @@ public class BookController(IRepositoryFactory repositoryFactory, ILogger<BookCo
             : NotFound(books.Message);
     }
 
-    [HttpPost(Name = "SearchBooksByStatus")]
-    public IActionResult SearchBooksByStatus([FromBody] Book.StatusEnum status)
+    [HttpGet("search/status/{status}",Name = "SearchBooksByStatus")]
+    public IActionResult SearchBooksByStatus(Book.StatusEnum status)
     {
         using var repository = repositoryFactory.GetRepository<Book>();
         var books = repository.GetByCondition(b => b.Status == status);

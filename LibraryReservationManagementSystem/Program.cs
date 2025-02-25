@@ -11,15 +11,14 @@ builder.AddNpgsqlDbContext<NpgApplicationContext>(connectionName: "LRMS");
 
 // Add services to the container.
 builder.Services.AddScoped<BookRepository>();
-builder.Services.AddScoped<BookRepository>();
-builder.Services.AddScoped<BookRepository>();
+builder.Services.AddScoped<CustomerRepository>();
+builder.Services.AddScoped<ReservationRepository>();
 
 builder.Services.AddScoped<ILibraryReservationManagementService, LibraryReservationManagementService>();
 
-builder.Services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
+builder.Services.AddTransient<IRepositoryFactory, RepositoryFactory>();
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

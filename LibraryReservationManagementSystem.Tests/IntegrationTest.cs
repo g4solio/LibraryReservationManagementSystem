@@ -1,6 +1,6 @@
 namespace LibraryReservationManagementSystem.Tests
 {
-    public class IntegrationTest1
+    public class IntegrationTest
     {
         [Test]
         public async Task GetWebResourceRootReturnsOkStatusCode()
