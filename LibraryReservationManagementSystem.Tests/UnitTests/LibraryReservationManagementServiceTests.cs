@@ -226,6 +226,7 @@ public class LibraryReservationManagementServiceTests
         // Arrange
         var customer = new Customer
         {
+            Id = 1,
             FirstName = null,
             LastName = null,
             Email = null,
@@ -248,8 +249,8 @@ public class LibraryReservationManagementServiceTests
             }
         };
         var service = Setup(
-            customerRepoMoqOptions: moq => moq.Setup(r => r.GetById(It.Is<int>(id => id == 1))).Returns(customer.AsSuccessfulOperation()),
-            reservationRepoMoqOptions: moq => moq.Setup(r => r.GetAll()).Returns(reservations.AsSuccessfulOperation<IList<Reservation>>()));
+            customerRepoMoqOptions: moq => moq.Setup(r => r.GetById(It.Is<int>(id => id == customer.Id))).Returns(customer.AsSuccessfulOperation()),
+            reservationRepoMoqOptions: moq => moq.Setup(r => r.GetByCondition(It.Is<Func<Reservation, bool>>(f => f(reservations[0])))).Returns(reservations.AsSuccessfulOperation<IList<Reservation>>()));
         // Act
         var result = service.GetReservationsByCustomer(1);
         // Assert
