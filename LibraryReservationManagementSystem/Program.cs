@@ -1,6 +1,7 @@
 using LibraryReservationManagementSystem.DbContexts;
 using LibraryReservationManagementSystem.Models;
 using LibraryReservationManagementSystem.Repositories;
+using LibraryReservationManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -14,6 +15,10 @@ builder.AddNpgsqlDbContext<NpgApplicationContext>(connectionName: "LRMS");
 builder.Services.AddScoped<BookRepository>();
 builder.Services.AddScoped<BookRepository>();
 builder.Services.AddScoped<BookRepository>();
+
+builder.Services.AddScoped<ILibraryReservationManagementService, LibraryReservationManagementService>();
+
+builder.Services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

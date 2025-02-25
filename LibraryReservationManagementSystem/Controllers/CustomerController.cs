@@ -6,7 +6,7 @@ namespace LibraryReservationManagementSystem.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CustomerController(RepositoryFactory repositoryFactory, ILogger<BookController> logger) : ControllerBase
+public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<BookController> logger) : ControllerBase
 {
     private readonly ILogger<BookController> _logger = logger;
 

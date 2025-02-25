@@ -3,7 +3,7 @@ using LibraryReservationManagementSystem.Models;
 
 namespace LibraryReservationManagementSystem.Repositories;
 
-public class RepositoryFactory(ServiceProvider serviceProvider)
+public class RepositoryFactory(ServiceProvider serviceProvider) : IRepositoryFactory
 {
     private readonly ServiceProvider _serviceProvider = serviceProvider;
 
@@ -18,6 +18,11 @@ public class RepositoryFactory(ServiceProvider serviceProvider)
         } ?? throw new ArgumentException($"Invalid type {typeof(T)}");
     }
 
+}
+
+public interface IRepositoryFactory
+{
+    IRepository<T> GetRepository<T>() where T : class;
 }
 
 

@@ -4,7 +4,7 @@ using LibraryReservationManagementSystem.Repositories;
 
 namespace LibraryReservationManagementSystem.Services;
 
-public class LibraryReservationManagementService(RepositoryFactory repositoryFactory, ILogger<LibraryReservationManagementService> logger) : ILibraryReservationManagementService
+public class LibraryReservationManagementService(IRepositoryFactory repositoryFactory, ILogger<LibraryReservationManagementService> logger) : ILibraryReservationManagementService
 {
     public IOperationResult<Reservation> RentABook(int customerId, int bookId)
     {
