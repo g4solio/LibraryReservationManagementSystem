@@ -17,6 +17,9 @@ public class NpgApplicationContext(DbContextOptions<NpgApplicationContext> optio
         modelBuilder.Entity<Book>().HasIndex(b => b.ISBN).IsUnique();
         modelBuilder.Entity<Customer>().HasIndex(c => c.Email).IsUnique();
 
+        modelBuilder.Entity<Reservation>().Navigation(r => r.Customer).AutoInclude();
+        modelBuilder.Entity<Reservation>().Navigation(r => r.Book).AutoInclude();
+
 
         modelBuilder.Entity<Models.Book>().ToTable("Books");
         modelBuilder.Entity<Models.Customer>().ToTable("Customers");

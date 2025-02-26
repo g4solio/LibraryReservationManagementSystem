@@ -37,7 +37,6 @@ public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<Bo
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public DateTime RegistrationDate { get; set; }
 
         public Customer ToCustomer()
         {
@@ -46,7 +45,7 @@ public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<Bo
                 FirstName = FirstName,
                 LastName = LastName,
                 Email = Email,
-                RegistrationDate = RegistrationDate
+                RegistrationDate = DateTime.Now
             };
         }
     }
@@ -71,7 +70,6 @@ public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<Bo
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public DateTime RegistrationDate { get; set; }
         public Customer ToCustomer()
         {
             return new Customer
@@ -80,7 +78,7 @@ public class CustomerController(IRepositoryFactory repositoryFactory, ILogger<Bo
                 FirstName = FirstName,
                 LastName = LastName,
                 Email = Email,
-                RegistrationDate = RegistrationDate
+                RegistrationDate = default,
             };
         }
     }

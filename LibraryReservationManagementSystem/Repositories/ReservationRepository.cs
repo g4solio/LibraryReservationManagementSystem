@@ -10,21 +10,28 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
     public IOperationResult<Reservation> Add(Reservation entity)
     {
         var reservation = applicationContext.Reservations.Add(entity);
-        applicationContext.SaveChanges();
 
         if (reservation.State != EntityState.Added)
-            "Reservation could not be added".AsFailedOperation<Reservation>();
+            return "Reservation could not be added".AsFailedOperation<Reservation>();
 
         return reservation.Entity.AsSuccessfulOperation();
     }
 
     public IOperationResult<Reservation> Update(Reservation entity)
     {
-        var reservation = applicationContext.Reservations.Update(entity);
-        applicationContext.SaveChanges();
+        var oldReservation = GetById(entity.Id);
+
+        if (!oldReservation.IsSuccess)
+            return oldReservation.Message.AsFailedOperation<Reservation>();
+
+        oldReservation.Data!.Customer = entity.Customer;
+        oldReservation.Data!.Book = entity.Book;
+        oldReservation.Data!.ExpirationDate = entity.ExpirationDate;
+
+        var reservation = applicationContext.Reservations.Update(oldReservation.Data!);
 
         if (reservation.State != EntityState.Modified)
-            "Reservation could not be updated".AsFailedOperation<Reservation>();
+            return "Reservation could not be updated".AsFailedOperation<Reservation>();
 
         return reservation.Entity.AsSuccessfulOperation();
     }
@@ -32,10 +39,9 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
     public IOperationResult<Reservation> Delete(Reservation entity)
     {
         var reservation = applicationContext.Reservations.Remove(entity);
-        applicationContext.SaveChanges();
 
         if (reservation.State != EntityState.Deleted)
-            "Reservation could not be deleted".AsFailedOperation<Reservation>();
+            return "Reservation could not be deleted".AsFailedOperation<Reservation>();
 
         return reservation.Entity.AsSuccessfulOperation();
     }
@@ -45,7 +51,7 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
         var reservation = applicationContext.Reservations.Find(id);
 
         if (reservation == null)
-            "Reservation could not be found".AsFailedOperation<Reservation>();
+            return "Reservation could not be found".AsFailedOperation<Reservation>();
 
         return reservation!.AsSuccessfulOperation();
     }
@@ -55,7 +61,7 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
         var reservations = applicationContext.Reservations.ToList();
 
         if (reservations.Count == 0)
-            "No reservations found".AsFailedOperation<IList<Reservation>>();
+            return "No reservations found".AsFailedOperation<IList<Reservation>>();
 
         return reservations.AsSuccessfulOperation<IList<Reservation>>();
     }
@@ -65,7 +71,7 @@ public class ReservationRepository(NpgApplicationContext applicationContext) : I
         var reservations = applicationContext.Reservations.Where(condition).ToList();
 
         if (reservations.Count == 0)
-            "No reservations found".AsFailedOperation<IList<Reservation>>();
+            return "No reservations found".AsFailedOperation<IList<Reservation>>();
 
         return reservations.AsSuccessfulOperation<IList<Reservation>>();
     }

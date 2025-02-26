@@ -1,17 +1,28 @@
-﻿using LibraryReservationManagementSystem.Services;
+﻿using LibraryReservationManagementSystem.Models;
+using LibraryReservationManagementSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryReservationManagementSystem.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class LibraryReservationManagementController(LibraryReservationManagementService service) : ControllerBase
+public class LibraryReservationManagementController(ILibraryReservationManagementService service) : ControllerBase
 {
 
-    [HttpPost("rent", Name = "RentABook")]
-    public IActionResult RentABook(int customerId, int bookId)
+    #region Context
+
+    public class RentABookRequest
     {
-        var result = service.RentABook(customerId, bookId);
+        public int CustomerId { get; set; }
+        public int BookId { get; set; }
+    }
+
+    #endregion
+
+    [HttpPost("Rent", Name = "RentABook")]
+    public IActionResult RentABook([FromBody] RentABookRequest request)
+    {
+        var result = service.RentABook(request.CustomerId, request.BookId);
         return result.IsSuccess
             ? Ok(result.Data)
             : BadRequest(result.Message);

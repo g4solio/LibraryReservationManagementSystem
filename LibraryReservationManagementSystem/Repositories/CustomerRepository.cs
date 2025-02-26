@@ -10,21 +10,28 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
     public IOperationResult<Customer> Add(Customer entity)
     {
         var customer = applicationContext.Customers.Add(entity);
-        applicationContext.SaveChanges();
 
         if (customer.State != EntityState.Added)
-            "Customer could not be added".AsFailedOperation<Customer>();
+            return "Customer could not be added".AsFailedOperation<Customer>();
 
         return customer.Entity.AsSuccessfulOperation();
     }
 
     public IOperationResult<Customer> Update(Customer entity)
     {
-        var customer = applicationContext.Customers.Update(entity);
-        applicationContext.SaveChanges();
+        var oldValue = GetById(entity.Id);
+
+        if (!oldValue.IsSuccess)
+            return oldValue.Message.AsFailedOperation<Customer>();
+
+        oldValue.Data!.FirstName = entity.FirstName;
+        oldValue.Data!.LastName = entity.LastName;
+        oldValue.Data!.Email = entity.Email;
+
+        var customer = applicationContext.Customers.Update(oldValue.Data!);
 
         if (customer.State != EntityState.Modified)
-            "Customer could not be updated".AsFailedOperation<Customer>();
+            return "Customer could not be updated".AsFailedOperation<Customer>();
 
         return customer.Entity.AsSuccessfulOperation();
     }
@@ -32,10 +39,9 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
     public IOperationResult<Customer> Delete(Customer entity)
     {
         var customer = applicationContext.Customers.Remove(entity);
-        applicationContext.SaveChanges();
 
         if (customer.State != EntityState.Deleted)
-            "Customer could not be deleted".AsFailedOperation<Customer>();
+            return "Customer could not be deleted".AsFailedOperation<Customer>();
 
         return customer.Entity.AsSuccessfulOperation();
     }
@@ -45,7 +51,7 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
         var customer = applicationContext.Customers.Find(id);
 
         if (customer == null)
-            "Customer could not be found".AsFailedOperation<Customer>();
+            return "Customer could not be found".AsFailedOperation<Customer>();
 
         return customer!.AsSuccessfulOperation();
     }
@@ -55,7 +61,7 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
         var customers = applicationContext.Customers.ToList();
 
         if (customers.Count == 0)
-            "No customers found".AsFailedOperation<IEnumerable<Customer>>();
+            return "No customers found".AsFailedOperation<IList<Customer>>();
 
         return customers.AsSuccessfulOperation<IList<Customer>>();
     }
@@ -65,7 +71,7 @@ public class CustomerRepository(NpgApplicationContext applicationContext) : IRep
         var customers = applicationContext.Customers.Where(condition).ToList();
 
         if (customers.Count == 0)
-            "No customers found".AsFailedOperation<IEnumerable<Customer>>();
+            return "No customers found".AsFailedOperation<IList<Customer>>();
 
         return customers.AsSuccessfulOperation<IList<Customer>>();
     }

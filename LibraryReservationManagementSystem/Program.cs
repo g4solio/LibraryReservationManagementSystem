@@ -5,6 +5,8 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); //TODO(DG): Convert everything to UTC
+
 builder.AddServiceDefaults();
 
 builder.AddNpgsqlDbContext<NpgApplicationContext>(connectionName: "LRMS");
